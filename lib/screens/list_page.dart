@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/const.dart';
-import 'package:music_player/model/current_playing.dart';
 import 'package:music_player/model/music_model.dart';
 import 'package:music_player/screens/details_page.dart';
 import 'package:music_player/widget/custom_button.dart';
@@ -35,131 +34,111 @@ class _ListPageState extends State<ListPage> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 2),
-                        child: Consumer<CurrentPlaying>(
-                          builder: (context, value, child) {
-                            return Material(
-                              color: Colors.transparent,
-                              elevation: .4,
-                              shadowColor: AppColors.lightBlueShadow,
-                              animationDuration: Duration(microseconds: 500),
+                        child: Material(
+                          color: Colors.transparent,
+                          elevation: .4,
+                          shadowColor: AppColors.lightBlueShadow,
+                          animationDuration: Duration(microseconds: 500),
+                          borderRadius: BorderRadius.circular(20),
+                          child: Hero(
+                            tag: "player $index",
+                            child: InkWell(
                               borderRadius: BorderRadius.circular(20),
-                              child: Hero(
-                                tag: "player $index",
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(20),
-                                  onTap: () {
-                                    _list.stopAll();
-                                    value.setAudioPlayerEventListener(_list);
-                                    value.changePlayId(_list.entity[index]);
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (_) => DetailsPage()));
-                                  },
-                                  child: AnimatedContainer(
-                                    duration: Duration(microseconds: 500),
-                                    padding: EdgeInsets.all(16),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: value.currentPlay != null
-                                            ? _list.entity[index].isPlaying
-                                                ? AppColors.activeColor
-                                                : AppColors.mainColor
-                                            : AppColors.mainColor),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                              onTap: () {
+                                _list.stopAll();
+                                _list.changePlayId(_list.entity[index]);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => DetailsPage()));
+                              },
+                              child: AnimatedContainer(
+                                duration: Duration(microseconds: 500),
+                                padding: EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: _list.checkCurrentPlayNull()
+                                        ? _list.entity[index].isPlaying
+                                            ? AppColors.activeColor
+                                            : AppColors.mainColor
+                                        : AppColors.mainColor),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Wrap(
+                                            runAlignment: WrapAlignment.start,
+                                            alignment: WrapAlignment.start,
                                             children: [
-                                              Wrap(
-                                                runAlignment:
-                                                    WrapAlignment.start,
-                                                alignment: WrapAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    _list.entity[index]
-                                                        .songTitle,
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    softWrap: true,
-                                                    style: TextStyle(
-                                                        color: AppColors
-                                                            .styleColor,
-                                                        fontSize: 16),
-                                                  ),
-                                                ],
-                                              ),
-                                              Wrap(
-                                                runAlignment:
-                                                    WrapAlignment.start,
-                                                alignment: WrapAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    _list.entity[index]
-                                                        .songAlbum,
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    softWrap: true,
-                                                    style: TextStyle(
-                                                        color: AppColors
-                                                            .styleColor
-                                                            .withAlpha(90),
-                                                        fontSize: 16),
-                                                  ),
-                                                ],
+                                              Text(
+                                                _list.entity[index].songTitle,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: true,
+                                                style: TextStyle(
+                                                    color: AppColors.styleColor,
+                                                    fontSize: 16),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(left: 8),
-                                          child: CustomButton(
-                                            child: Icon(
-                                              value.currentPlay != null
-                                                  ? _list.entity[index]
-                                                          .isPlaying
-                                                      ? Icons.pause
-                                                      : Icons.play_arrow
-                                                  : Icons.play_arrow,
-                                              color: value.currentPlay != null
-                                                  ? _list.entity[index]
-                                                          .isPlaying
-                                                      ? Colors.white
-                                                      : AppColors.styleColor
-                                                  : AppColors.styleColor,
-                                            ),
-                                            isActive: value.currentPlay != null
-                                                ? _list.entity[index].isPlaying
-                                                : false,
-                                            size: 50,
-                                            onTap: () {
-                                              if (_list
-                                                  .entity[index].isPlaying) {
-                                                print("pause");
-                                                value.pauseAudio();
-                                              } else {
-                                                _list.stopAll();
-                                                value
-                                                    .setAudioPlayerEventListener(
-                                                        _list);
-                                                value.changePlayId(
-                                                    _list.entity[index]);
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ],
+                                          /*Wrap(
+                                            runAlignment: WrapAlignment.start,
+                                            alignment: WrapAlignment.start,
+                                            children: [
+                                              Text(
+                                                _list.entity[index].songAlbum,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: true,
+                                                style: TextStyle(
+                                                    color: AppColors.styleColor
+                                                        .withAlpha(90),
+                                                    fontSize: 16),
+                                              ),
+                                            ],
+                                          ),*/
+                                        ],
+                                      ),
                                     ),
-                                  ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 8),
+                                      child: CustomButton(
+                                        child: Icon(
+                                          _list.checkCurrentPlayNull()
+                                              ? _list.entity[index].isPlaying
+                                                  ? Icons.pause
+                                                  : Icons.play_arrow
+                                              : Icons.play_arrow,
+                                          color: _list.checkCurrentPlayNull()
+                                              ? _list.entity[index].isPlaying
+                                                  ? Colors.white
+                                                  : AppColors.styleColor
+                                              : AppColors.styleColor,
+                                        ),
+                                        isActive: _list.checkCurrentPlayNull()
+                                            ? _list.entity[index].isPlaying
+                                            : false,
+                                        size: 50,
+                                        onTap: () {
+                                          if (_list.entity[index].isPlaying) {
+                                            print("pause");
+                                            _list.pauseAudio();
+                                          } else {
+                                            _list.stopAll();
+                                            _list.changePlayId(
+                                                _list.entity[index]);
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          },
+                            ),
+                          ),
                         ),
                       );
                     },
@@ -213,7 +192,7 @@ class _ListPageState extends State<ListPage> {
                           size: 50,
                           onTap: () {},
                         ),
-                        Consumer<CurrentPlaying>(
+                        Consumer<MusicModel>(
                           builder: (context, value, child) {
                             return Hero(
                               tag: "player",
@@ -265,12 +244,14 @@ class _ListPageState extends State<ListPage> {
           ),
         ),
         backgroundColor: AppColors.mainColor,
-        body: Consumer<CurrentPlaying>(
+        body: Consumer<MusicModel>(
           builder: (context, value, child) {
-            if (value.currentPlay == null) {
-              return stack;
-            } else {
+            if (value.checkCurrentPlayNull()) {
+              value.isAudioPlayerPlaying();
               return nestedScrollView;
+            } else {
+              value.isAudioPlayerPlaying();
+              return stack;
             }
           },
         ));

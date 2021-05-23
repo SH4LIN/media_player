@@ -8,7 +8,16 @@ class SongInfo {
   int _songSize;
   String _songPath;
   Uri _songUri;
+  int _seconds;
+  int _minutes;
+  int _hour;
   bool _isPlaying = false;
+
+  int get seconds => _seconds;
+
+  set seconds(int value) {
+    _seconds = value;
+  }
 
   bool get isPlaying => _isPlaying;
 
@@ -59,5 +68,17 @@ class SongInfo {
 
   set songAlbum(String value) {
     _songAlbum = value;
+  }
+
+  int get minutes => _minutes;
+
+  set minutes(int value) {
+    _minutes = value;
+  }
+
+  int get hour => _hour;
+
+  set hour(int value) {
+    _hour = value;
   }
 }

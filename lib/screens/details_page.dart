@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/core/const.dart';
-import 'package:music_player/model/current_playing.dart';
 import 'package:music_player/model/music_model.dart';
 import 'package:music_player/widget/custom_button.dart';
 import 'package:music_player/widget/custom_progress.dart';
@@ -71,7 +70,7 @@ class _DetailsPageState extends State<DetailsPage> {
               child: Expanded(
                 child: Column(
                   children: [
-                    Consumer<CurrentPlaying>(builder: (context, value, child) {
+                    Consumer<MusicModel>(builder: (context, value, child) {
                       return Align(
                         alignment: Alignment.center,
                         child: Wrap(
@@ -90,7 +89,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                       );
                     }),
-                    Consumer<CurrentPlaying>(builder: (context, value, child) {
+                    /*Consumer<MusicModel>(builder: (context, value, child) {
                       return Text(value.currentPlay.songAlbum,
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
@@ -98,7 +97,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           style: TextStyle(
                               color: AppColors.styleColor.withAlpha(90),
                               fontSize: 12));
-                    }),
+                    }),*/
                   ],
                 ),
               ),
@@ -120,7 +119,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Consumer<CurrentPlaying>(builder: (context, value1, child) {
+                    Consumer<MusicModel>(builder: (context, value1, child) {
                       return Consumer<MusicModel>(
                           builder: (context, value, child) {
                         return CustomButton(
@@ -137,11 +136,11 @@ class _DetailsPageState extends State<DetailsPage> {
                         );
                       });
                     }),
-                    Consumer<CurrentPlaying>(
+                    Consumer<MusicModel>(
                       builder: (context, value, child) {
                         return CustomButton(
                           child: Icon(
-                            value.currentPlay.isPlaying
+                            value.isAudioPlayerPlaying()
                                 ? Icons.pause
                                 : Icons.play_arrow,
                             color: Colors.white,
@@ -150,7 +149,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           size: 60,
                           isActive: true,
                           onTap: () {
-                            if (value.currentPlay.isPlaying) {
+                            if (value.isAudioPlayerPlaying()) {
                               value.pauseAudio();
                             } else {
                               value.playAudio();
@@ -159,7 +158,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         );
                       },
                     ),
-                    Consumer<CurrentPlaying>(
+                    Consumer<MusicModel>(
                       builder: (context, value1, child) {
                         return Consumer<MusicModel>(
                           builder: (context, value, child) {
@@ -172,7 +171,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               size: 60,
                               onTap: () {
                                 value.stopAll();
-                                value1.playNext(value);
+                                value1.playNext();
                               },
                             );
                           },
